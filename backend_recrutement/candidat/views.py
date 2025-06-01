@@ -2,12 +2,13 @@ from datetime import timezone
 from django.utils.timezone import now, localtime
 from django.shortcuts import render, get_object_or_404
 
+from rest_framework import exceptions
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser # Nécessaire pour gérer l'upload de fichiers
 
 from rest_framework.views import APIView # Import de APIView
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView # Import de vues génériques
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, ListCreateAPIView # Import de vues génériques
 from rest_framework import mixins # Import des mixins
 # Importe le modèle Candidat depuis l'application pme
 from pme.models import Candidat, OffreEmploi, Candidature
@@ -103,46 +104,62 @@ class OffreEmploiDetailView(RetrieveAPIView):
 # --- Nouvelle Vue pour soumettre une Candidature ---
 
 # Vue pour créer une nouvelle candidature (pour les candidats authentifiés)
-class CandidatureCreateView(CreateAPIView):
-    serializer_class = CandidatureCreateSerializer # Utilise le serializer simple pour la création
+class CandidatureListCreateView(ListCreateAPIView):
+    """
+    Vue combinée pour:
+    - Lister les candidatures d'un candidat (GET)
+    - Créer une nouvelle candidature (POST)
+    """
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsCandidat] # L'utilisateur doit être authentifié ET un Candidat
-
-    def perform_create(self, serializer):
-        # Associe automatiquement la candidature au candidat authentifié
-        user = self.request.user
-        if user.is_authenticated and user.role == 'Candidat':
-            try:
-                candidat_profile = Candidat.objects.get(user=user)
-                # Sauvegarde la candidature, associant le candidat et l'offre (issue du serializer validé)
-                serializer.save(candidat=candidat_profile, statut='en attente', date_soumission=localtime())
-            except Candidat.DoesNotExist:
-                 # Si l'utilisateur Candidat n'a pas de profil candidat, refuser
-                 raise permissions.PermissionDenied("Vous devez avoir un profil candidat pour postuler à une offre.")
-        else:
-             # Si l'utilisateur n'est pas authentifié ou pas Candidat
-             raise permissions.PermissionDenied("Seuls les utilisateurs Candidat authentifiés peuvent postuler.")
-
-# --- Nouvelles Vues pour lister et voir les Candidatures d'un candidat ---
-
-# Vue pour lister les candidatures du candidat authentifié
-class CandidatureCandidateListView(ListAPIView):
-    serializer_class = CandidatureCandidateSerializer # Utilise le serializer pour candidats
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsCandidat] # L'utilisateur doit être authentifié ET un Candidat
+    permission_classes = [IsAuthenticated, IsCandidat]
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CandidatureCreateSerializer
+        return CandidatureCandidateSerializer
 
     def get_queryset(self):
-        # Retourne seulement les candidatures de l'utilisateur Candidat connecté
+        """Retourne seulement les candidatures de l'utilisateur Candidat connecté"""
         user = self.request.user
-        if user.is_authenticated and user.role == 'Candidat':
-            try:
-                candidat_profile = Candidat.objects.get(user=user)
-                # Retourne les candidatures pour ce candidat
-                return Candidature.objects.filter(candidat=candidat_profile).order_by('-date_soumission').select_related('offre__entreprise') # select_related pour optimiser
-            except Candidat.DoesNotExist:
-                return Candidature.objects.none() # Aucun résultat si le candidat n'a pas de profil
-        return Candidature.objects.none() # Aucun résultat si pas authentifié ou pas Candidat
+        offre_id = self.request.query_params.get('offre', None)
+        
+        try:
+            candidat_profile = Candidat.objects.get(user=user)
+            queryset = Candidature.objects.filter(candidat=candidat_profile)
+            
+            # Filtre supplémentaire si un ID d'offre est spécifié
+            if offre_id:
+                queryset = queryset.filter(offre_id=offre_id)
+                
+            return queryset.order_by('-date_soumission').select_related('offre__entreprise')
+        except Candidat.DoesNotExist:
+            return Candidature.objects.none()
 
+    def perform_create(self, serializer):
+        """Gère la création d'une candidature avec les bonnes associations"""
+        user = self.request.user
+        offre_id = serializer.validated_data['offre'].id
+        
+        # Vérifie si une candidature existe déjà pour cette offre
+        if Candidature.objects.filter(
+            candidat__user=user,
+            offre_id=offre_id
+        ).exists():
+            raise exceptions.ValidationError(
+                "Vous avez déjà postulé à cette offre."
+            )
+
+        try:
+            candidat_profile = Candidat.objects.get(user=user)
+            serializer.save(
+                candidat=candidat_profile,
+                statut='en attente',
+                date_soumission=localtime()
+            )
+        except Candidat.DoesNotExist:
+            raise exceptions.PermissionDenied(
+                "Vous devez avoir un profil candidat pour postuler à une offre."
+            )
 # Vue pour voir le détail d'une candidature spécifique du point de vue du candidat
 class CandidatureCandidateDetailView(RetrieveAPIView):
     queryset = Candidature.objects.all() # Queryset de base (sera filtré par la permission)

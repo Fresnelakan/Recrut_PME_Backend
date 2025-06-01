@@ -1,13 +1,13 @@
 # candidat/urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from .views import CandidatureListCreateView
 # Importe le ViewSet que nous venons de créer
 from .views import (
     CandidatProfileViewSet,
+    CandidatureListCreateView,
     OffreEmploiListView,
     OffreEmploiDetailView,
-    CandidatureCreateView,
-    CandidatureCandidateListView,
     CandidatureCandidateDetailView,
 )
 
@@ -35,21 +35,10 @@ urlpatterns = [
     ),
 
     # --- Nouvelles URLs pour lister et voir les Candidatures d'un candidat ---
-    # /api/candidat/applications/ (GET seulement)
-    # Note : L'URL est la même que pour la création, mais les méthodes HTTP différentes
-    path(
+     path(
         'applications/',
-        CandidatureCandidateListView.as_view(),
-        name='candidat-applications-list'
-    ), 
- 
- 
-    # --- Nouvelle URL pour soumettre une Candidature ---
-    # /api/candidat/applications/ (POST seulement)
-    path(
-        'applications/',
-        CandidatureCreateView.as_view(),
-        name='candidat-application-create'
+        CandidatureListCreateView.as_view(),
+        name='candidat-applications'
     ),
 
 
