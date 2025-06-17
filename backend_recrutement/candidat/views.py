@@ -69,18 +69,7 @@ class CandidatProfileViewSet(viewsets.ModelViewSet):
         else:
              raise permissions.PermissionDenied("Seuls les utilisateurs Candidat authentifiés peuvent créer un profil.")
 
-    # Les méthodes list, retrieve, update, partial_update, destroy du ModelViewSet
-    # fonctionneront en s'appuyant sur get_queryset et perform_create/perform_update.
-    # Le filtrage dans get_queryset et l'association dans perform_create garantissent
-    # qu'un candidat ne gère que son propre profil.
-    # La gestion de l'upload du fichier CV sera automatique grâce à ModelSerializer
-    # et MultiPartParser si le champ cv_path est un FileField/ImageField et est inclus
-    # dans les données de la requête.
-
-    # Tu peux personnaliser d'autres méthodes si nécessaire (ex: perform_update pour gérer l'upload lors de la mise à jour)
-# --- Nouvelles Vues pour les Offres d'Emploi (pour les candidats) ---
-
-# Vue pour lister toutes les offres d'emploi actives (accessibles aux candidats authentifiés)
+   
 class OffreEmploiListView(ListAPIView):
     # Utilise le serializer pour candidats pour l'affichage des offres
     serializer_class = OffreEmploiCandidateSerializer
