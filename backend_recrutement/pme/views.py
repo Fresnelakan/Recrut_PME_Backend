@@ -1,16 +1,58 @@
 from django.shortcuts import render, get_object_or_404
-
 from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
 from .models import Entreprise, OffreEmploi, Candidature, Candidat
 from .serializers import EntrepriseSerializer, OffreEmploiSerializer, CandidatureSerializer
 from authentication.models import User
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import mixins
 
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+
+from .models import Candidature, Candidat, OffreEmploi
+from .serializers import CandidatureSerializer
+
+class CandidatureCreateView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        offre_id = request.data.get('offre')
+        cv_url = request.data.get('cv')  # Récupère l'URL du CV envoyé par le frontend (facultatif)
+
+        try:
+            # Vérifier l'offre
+            offre = OffreEmploi.objects.get(id=offre_id, est_actif=True)
+            candidat = request.user.candidat  # Supposant que User est lié à Candidat
+
+            # Vérifier si le candidat a un CV
+            if not candidat.cv and not cv_url:
+                return Response({"error": "Veuillez uploader un CV dans votre profil avant de postuler."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Vérifier si le candidat a déjà postulé
+            if Candidature.objects.filter(candidat=candidat, offre=offre).exists():
+                return Response({"error": "Vous avez déjà postulé à cette offre."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Créer la candidature
+            candidature = Candidature.objects.create(
+                candidat=candidat,
+                offre=offre,
+                statut='en attente'
+                # Si tu ajoutes un champ cv dans Candidature : cv=candidat.cv
+            )
+            serializer = CandidatureSerializer(candidature)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except OffreEmploi.DoesNotExist:
+            return Response({"error": "Offre invalide ou inactive."}, status=status.HTTP_404_NOT_FOUND)
+        except Candidat.DoesNotExist:
+            return Response({"error": "Profil candidat non trouvé."}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
 class EntrepriseViewSet(viewsets.ModelViewSet):
     
     serializer_class = EntrepriseSerializer

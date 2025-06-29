@@ -24,4 +24,10 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/pme/', include('pme.urls')),
     path('api/candidat/', include('candidat.urls')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+if settings.DEBUG:
+    # Serve static files in development mode
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+

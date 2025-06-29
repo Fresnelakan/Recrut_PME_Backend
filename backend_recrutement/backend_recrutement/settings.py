@@ -93,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'recrutement_pme',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'chahidath',
         'HOST': 'localhost',
         'PORT': '3306'
     }
@@ -157,3 +157,4 @@ SIMPLE_JWT = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

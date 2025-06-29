@@ -9,6 +9,7 @@ from .views import (
     OffreEmploiListView,
     OffreEmploiDetailView,
     CandidatureCandidateDetailView,
+    MonCVView
 )
 
 router = DefaultRouter()
@@ -48,5 +49,5 @@ urlpatterns = [
         CandidatureCandidateDetailView.as_view(),
         name='candidat-application-detail'
     ),
-
+    path('api/candidat/mon-cv/', MonCVView.as_view(), name='mon_cv'),
 ]
