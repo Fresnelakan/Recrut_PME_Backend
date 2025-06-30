@@ -80,6 +80,7 @@ class CandidatureCandidateSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'statut',
+            'cv_url',
             'date_soumission',
             'offre_titre',
             'offre_entreprise',
