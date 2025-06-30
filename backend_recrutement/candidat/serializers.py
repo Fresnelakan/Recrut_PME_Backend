@@ -15,7 +15,7 @@ class CandidatSerializer(serializers.ModelSerializer):
     
     # Utiliser SerializerMethodField pour construire manuellement l'URL du CV
     # de manière à ce qu'elle pointe vers le bon serveur/port média.
-    cv = serializers.SerializerMethodField() 
+    cv = serializers.FileField(required=False, allow_null=True) 
 
     class Meta:
         model = Candidat
@@ -70,7 +70,9 @@ class CandidatureCandidateSerializer(serializers.ModelSerializer):
     offre_id = serializers.IntegerField(source='offre.id', read_only=True)
     cv_url = serializers.SerializerMethodField()
     def get_cv_url(self, obj):
-      return obj.cv.url if obj.cv else None
+        if obj.candidat and obj.candidat.cv:
+            return f"http://127.0.0.1:8001{obj.candidat.cv.url}"
+        return None
 
     class Meta:
         model = Candidature

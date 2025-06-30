@@ -39,27 +39,6 @@ class IsCandidat(permissions.BasePermission):
 
 
 # ViewSet pour gérer le profil Candidat (API pour les candidats eux-mêmes)
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from pme.models import Candidat
-from .permissions import IsCandidat  # ta permission perso
-
-class MonCVView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsCandidat]
-
-    def get(self, request):
-        try:
-            candidat = Candidat.objects.get(user=request.user)
-            cv_url = candidat.cv.url if candidat.cv else None
-            if not cv_url:
-                return Response({"error": "Aucun CV trouvé."}, status=404)
-            return Response({"cv": cv_url})
-        except Candidat.DoesNotExist:
-            return Response({"error": "Profil candidat introuvable."}, status=404)
-
 class CandidatProfileViewSet(viewsets.ModelViewSet):
     serializer_class = CandidatSerializer
     authentication_classes = [JWTAuthentication] # Utilise l'authentification JWT
@@ -67,7 +46,7 @@ class CandidatProfileViewSet(viewsets.ModelViewSet):
 
     # Parser pour gérer les données de formulaire et les fichiers uploadés
     parser_classes = [MultiPartParser, FormParser]
-    
+
     def get_queryset(self):
         # Ne retourne QUE le profil Candidat de l'utilisateur connecté
         user = self.request.user
@@ -75,7 +54,6 @@ class CandidatProfileViewSet(viewsets.ModelViewSet):
             # Le profil Candidat a le même PK que l'utilisateur
             return Candidat.objects.filter(user=user)
         return Candidat.objects.none() # Aucun résultat si pas authentifié ou pas Candidat
-    
 
     def perform_create(self, serializer):
         # Associe automatiquement le profil Candidat à l'utilisateur connecté
@@ -91,7 +69,18 @@ class CandidatProfileViewSet(viewsets.ModelViewSet):
         else:
              raise permissions.PermissionDenied("Seuls les utilisateurs Candidat authentifiés peuvent créer un profil.")
 
-   
+    # Les méthodes list, retrieve, update, partial_update, destroy du ModelViewSet
+    # fonctionneront en s'appuyant sur get_queryset et perform_create/perform_update.
+    # Le filtrage dans get_queryset et l'association dans perform_create garantissent
+    # qu'un candidat ne gère que son propre profil.
+    # La gestion de l'upload du fichier CV sera automatique grâce à ModelSerializer
+    # et MultiPartParser si le champ cv_path est un FileField/ImageField et est inclus
+    # dans les données de la requête.
+
+    # Tu peux personnaliser d'autres méthodes si nécessaire (ex: perform_update pour gérer l'upload lors de la mise à jour)
+# --- Nouvelles Vues pour les Offres d'Emploi (pour les candidats) ---
+
+# Vue pour lister toutes les offres d'emploi actives (accessibles aux candidats authentifiés)
 class OffreEmploiListView(ListAPIView):
     # Utilise le serializer pour candidats pour l'affichage des offres
     serializer_class = OffreEmploiCandidateSerializer

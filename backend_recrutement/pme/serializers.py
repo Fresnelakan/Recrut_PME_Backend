@@ -33,7 +33,7 @@ class CandidatureSerializer(serializers.ModelSerializer):
     candidat_nom_complet = serializers.CharField(source='candidat.nom_complet', read_only=True)
     # On peut aussi ajouter l'email du candidat via la relation Candidat -> User
     candidat_email = serializers.EmailField(source='candidat.user.email', read_only=True)
-
+    cv_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Candidature
@@ -47,6 +47,7 @@ class CandidatureSerializer(serializers.ModelSerializer):
             'offre_titre', # Champ en lecture seule ajouté
             'candidat_nom_complet', # Champ en lecture seule ajouté
             'candidat_email', # Champ en lecture seule ajouté
+            'cv_url',
             'created_at',
             'updated_at'
         ]
@@ -59,12 +60,14 @@ class CandidatureSerializer(serializers.ModelSerializer):
             'offre_titre',
             'candidat_nom_complet',
             'candidat_email',
+            'cv_url',
             'created_at',
             'updated_at'
         ]
 
-    # Tu peux ajouter une validation pour le statut si nécessaire
-    # def validate_statut(self, value):
-    #     if value not in [choice[0] for choice in Candidature.STATUT_CHOICES]:
-    #         raise serializers.ValidationError("Statut invalide.")
-    #     return value
+    def get_cv_url(self, obj):
+        if obj.candidat.cv:
+            return f"http://127.0.0.1:8001{obj.candidat.cv.url}"
+        return None
+
+
