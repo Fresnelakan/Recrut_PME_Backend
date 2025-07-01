@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import EntrepriseViewSet, OffreEmploiViewSet, CandidatureListByOffreView, CandidatureDetailUpdateStatusView, CandidatureCreateView
+from .views import EntrepriseViewSet, OffreEmploiViewSet, CandidatureListByOffreView, CandidatureDetailUpdateStatusView, CandidatureCreateView, ScoreCandidaturesView
 
 router = DefaultRouter()
 # Enregistre le ViewSet pour le profil entreprise
@@ -32,4 +32,12 @@ urlpatterns = [
     path('candidat/applications/', CandidatureCreateView.as_view(), name='candidature_create'),
     # Tu pourrais ajouter d'autres URLs si nécessaire (ex: supprimer candidature - bien que la PME puisse le faire via la vue detail/update si tu ajoutes 'delete')
 
+]
+
+urlpatterns += [
+    path(
+        'offres/<int:offre_id>/score_candidatures/',
+        ScoreCandidaturesView.as_view(),
+        name='score-candidatures'
+    ),
 ]

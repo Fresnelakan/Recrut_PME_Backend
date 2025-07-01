@@ -44,6 +44,7 @@ class CandidatureSerializer(serializers.ModelSerializer):
             'candidat', # On inclut le candidat_id si besoin, mais ici ce sera surtout lu
             'statut',
             'date_soumission',
+            'score_pertinence',
             'offre_titre', # Champ en lecture seule ajouté
             'candidat_nom_complet', # Champ en lecture seule ajouté
             'candidat_email', # Champ en lecture seule ajouté

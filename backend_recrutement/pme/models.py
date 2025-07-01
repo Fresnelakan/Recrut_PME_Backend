@@ -106,7 +106,13 @@ class Candidature(models.Model):
     date_soumission = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    score_pertinence = models.FloatField(
+        null=True,
+        blank=True,
+        help_text="Score de pertinence du CV par rapport à l'offre (0 à 100)"
+    )
 
+    
     def __str__(self):
         return f"{self.candidat.nom_complet} - {self.offre.titre}"
 

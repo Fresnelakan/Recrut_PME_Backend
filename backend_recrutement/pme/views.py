@@ -14,6 +14,9 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Candidature, Candidat, OffreEmploi
 from .serializers import CandidatureSerializer
 
+import PyPDF2
+from django.db.models import F
+
 class CandidatureCreateView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -206,3 +209,56 @@ class CandidatureDetailUpdateStatusView(RetrieveAPIView, UpdateAPIView):
     # La méthode retrieve (GET) est héritée de RetrieveAPIView
     # La méthode partial_update (PATCH) est héritée de UpdateAPIView
     # La méthode perform_update est héritée et sauvegardera le serializer
+
+
+class ScoreCandidaturesView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated, IsPMEAndOfferOwner]
+
+    def post(self, request, offre_id):
+        # Vérifie que l'offre appartient à la PME connectée
+        user = request.user
+        try:
+            entreprise = Entreprise.objects.get(user=user)
+            offre = OffreEmploi.objects.get(id=offre_id, entreprise=entreprise)
+        except (Entreprise.DoesNotExist, OffreEmploi.DoesNotExist):
+            return Response({"detail": "Offre non trouvée ou non autorisée."}, status=403)
+
+        # Récupère la description de l'offre
+        description = offre.description.lower().split()
+        # Récupère toutes les candidatures pour cette offre
+        candidatures = Candidature.objects.filter(offre=offre).select_related('candidat')
+
+        def extract_text_from_pdf(cv_field):
+            if not cv_field:
+                return ""
+            try:
+                with cv_field.open('rb') as f:
+                    reader = PyPDF2.PdfReader(f)
+                    text = ""
+                    for page in reader.pages:
+                        text += page.extract_text() or ""
+                    return text.lower()
+            except Exception:
+                return ""
+
+        # Calcule le score pour chaque candidature
+        for candidature in candidatures:
+            cv_text = extract_text_from_pdf(candidature.candidat.cv)
+            cv_words = set(cv_text.split())
+            offre_words = set(description)
+            if not cv_words or not offre_words:
+                score = 0.0
+            else:
+                common = cv_words & offre_words
+                score = round(100 * len(common) / len(offre_words), 2) if offre_words else 0.0
+            candidature.score_pertinence = score
+            candidature.save(update_fields=['score_pertinence'])
+
+        # Sérialise et retourne la liste triée
+        serializer = CandidatureSerializer(
+            candidatures.order_by('-score_pertinence'),
+            many=True
+        )
+        return Response(serializer.data)   
+
