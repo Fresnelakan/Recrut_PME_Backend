@@ -1,0 +1,944 @@
+{
+	"info": {
+		"_postman_id": "35a1edda-60aa-43e9-94ff-97be512d1eb2",
+		"name": "Recrutement_PME",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40206322",
+		"_collection_link": "https://web.postman.co/workspace/PME-Recrutement-Workspace~88b0f0fe-bd41-4a96-82a1-d0c3be5de157/collection/40206322-35a1edda-60aa-43e9-94ff-97be512d1eb2?action=share&source=collection_link&creator=40206322"
+	},
+	"item": [
+		{
+			"name": "connexion user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"fresnelakan@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/auth/login/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"auth",
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "enregistrement user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"batoko@gmail.com\",\r\n    \"password\": \"12345\",\r\n    \"role\": \"PME\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/auth/register/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"auth",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rafraîchir le Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"refresh\": \"{{refresh_token}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/auth/token/refresh/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"auth",
+						"token",
+						"refresh",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deconnexion",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUwMDY4MTMzLCJpYXQiOjE3NTAwNjQ1MzMsImp0aSI6ImUyMDRkYThiNzcyMzRiMTI4MWQ2Yzg4ZjljM2NhMGVmIiwidXNlcl9pZCI6MSwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.SEgZfnbg1ruS4pyVJ3kBPj1jorIyyLsNZ3Nd3SMozEU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MDA2ODEzMywiaWF0IjoxNzUwMDY0NTMzLCJqdGkiOiI4NzRhZGExZjllMGE0NTM2OWRhY2Y1Yjg5ZTAwMDNjOSIsInVzZXJfaWQiOjEsImVtYWlsIjoiZnJlc25lbGFrYW5AZ21haWwuY29tIn0.e0Uuii1VS4oTomVKVwLxItId_A7SWX8xefndWW7txdQ\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/auth/logout/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"auth",
+						"logout",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Créer/Mettre à jour (Upload logo)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2NDU3MDYzLCJpYXQiOjE3NDY0NTM0NjMsImp0aSI6IjYwYTk1OWZjMmZlZjRkYWQ4ODIxYTFiY2RjMGQ0YzY5IiwidXNlcl9pZCI6NywiZW1haWwiOiJiYXRva29AZ21haWwuY29tIn0.FGfCSGa4UVo6WyfY8g8Qz71-uxd8kuue-hlV_KiyybE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nom_entreprise\": \"Ida market\",\r\n    \"description\": \"Vente de produite de beauté\"\r\n    // Inclus tous les champs requis par le serializer même si tu ne les modifies pas (pour PUT)\r\n    // Si tu utilises PATCH, tu peux n'envoyer que les champs modifiés.\r\n    ,\"logo_path\": null // Si tu ne modifies pas le logo, envoie null ou la valeur existante\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/profil/entreprise/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"profil",
+						"entreprise",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Récupérer le profil",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2NDU3MDYzLCJpYXQiOjE3NDY0NTM0NjMsImp0aSI6IjYwYTk1OWZjMmZlZjRkYWQ4ODIxYTFiY2RjMGQ0YzY5IiwidXNlcl9pZCI6NywiZW1haWwiOiJiYXRva29AZ21haWwuY29tIn0.FGfCSGa4UVo6WyfY8g8Qz71-uxd8kuue-hlV_KiyybE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/profil/entreprise/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"profil",
+						"entreprise",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Créer les offres",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MzczNDQ0LCJpYXQiOjE3NDYzNjk4NDQsImp0aSI6IjJjNzA5NDYzMzViOTQzZWZiNjY1NjE3OGY1Mzg3Yjg2IiwidXNlcl9pZCI6NSwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.G_CzK8TetdADALKri5hNDFoKdxMDoQIFGCiYXfoGc7w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"titre\": \"Développeur Python Senior (Test)\",\r\n    \"description\": \"Nous recherchons un développeur Python expérimenté pour rejoindre notre équipe de test.\",\r\n    \"est_actif\": true\r\n    // 'entreprise' est automatiquement associée par la vue\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/offres/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"offres",
+						""
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lister les offres",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MzY4MzUyLCJpYXQiOjE3NDYzNjQ3NTIsImp0aSI6Ijc3NDUzZDk4MDg3ODQwODE5ZGNiOGI1ZWVlZmUyMzZhIiwidXNlcl9pZCI6NSwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.T15DSCV_J5PjczL-2GOif7LTlRIquH2dAH4p37ttdIk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/offres/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"offres",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modifier une offre d'emploi",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MzY4MzUyLCJpYXQiOjE3NDYzNjQ3NTIsImp0aSI6Ijc3NDUzZDk4MDg3ODQwODE5ZGNiOGI1ZWVlZmUyMzZhIiwidXNlcl9pZCI6NSwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.T15DSCV_J5PjczL-2GOif7LTlRIquH2dAH4p37ttdIk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"titre\": \"Développeur Backend Python (Test Modifié)\",\r\n    \"description\": \"Description mise à jour pour le poste backend Python.\",\r\n    \"est_actif\": false // Par exemple, marquer l'offre comme inactive\r\n    // Inclus tous les champs requis par le serializer même si tu ne les modifies pas (pour PUT)\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/offres/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"offres",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Supprimer une offre d'emploi",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MzY4MzUyLCJpYXQiOjE3NDYzNjQ3NTIsImp0aSI6Ijc3NDUzZDk4MDg3ODQwODE5ZGNiOGI1ZWVlZmUyMzZhIiwidXNlcl9pZCI6NSwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.T15DSCV_J5PjczL-2GOif7LTlRIquH2dAH4p37ttdIk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/offres/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"offres",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lister les candidatures pour une offre spécifique",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUwMDkxNzYwLCJpYXQiOjE3NTAwODgxNjAsImp0aSI6ImQ0NzYyOTFmOWE1NjQxOGY5YmU4ODZiMTcyOTlmZjgxIiwidXNlcl9pZCI6MSwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.KjNzrQqRn1E6aN7ypuLAtAUBuZxwAeALYXaRrkz_3G4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/offres/7/candidatures/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"offres",
+						"7",
+						"candidatures",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consulter le détail d'une candidature",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4ODk5NjYyLCJpYXQiOjE3NDg4OTYwNjIsImp0aSI6IjQ4OWUzNTNmODcxNzQxZDNiZmQ1NzNjNzQ0Mjg4M2FjIiwidXNlcl9pZCI6MiwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.1MOVW89k2vPbcnYDkqkZYB674vPXKVXkJ7OzWZQcSeg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/candidatures/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"candidatures",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Changer le statut d'une candidature",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MzczNDQ0LCJpYXQiOjE3NDYzNjk4NDQsImp0aSI6IjJjNzA5NDYzMzViOTQzZWZiNjY1NjE3OGY1Mzg3Yjg2IiwidXNlcl9pZCI6NSwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.G_CzK8TetdADALKri5hNDFoKdxMDoQIFGCiYXfoGc7w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"statut\" : \"acceptée\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/pme/candidatures/4/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"pme",
+						"candidatures",
+						"4",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Créer un profil Candidat",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NzM3NzMwLCJpYXQiOjE3NDg3MzQxMzAsImp0aSI6ImI0N2I2YTExOTU5MTQwNmE5MTEzM2JkY2VjYjZhNTUyIiwidXNlcl9pZCI6MSwiZW1haWwiOiJzdGV2ZW55YWtwb25AZ21haWwuY29tIn0.L3UoTbMQACUAIr7YrUwSzAK5GLSfm_9hhQJ3YkB_6Go",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nom_complet",
+							"value": "\"YAKPON Steven\"",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "\"Architecte senior de 10 ans d'expérience passionnée par l'écologie\" ",
+							"type": "text"
+						},
+						{
+							"key": "cv",
+							"type": "file",
+							"src": "/C:/Users/HP/Downloads/Devoir de maison n°5.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/candidat/profil/candidat/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"candidat",
+						"profil",
+						"candidat",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Récupérer le profil Candidat",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NzQzMzQ3LCJpYXQiOjE3NDg3Mzk3NDcsImp0aSI6ImQ2MWEyYjliMmJmYTQ1MDk4ZjgyZTkxMGRlNjY5ZGUyIiwidXNlcl9pZCI6MSwiZW1haWwiOiJzdGV2ZW55YWtwb25AZ21haWwuY29tIn0.Rm_Xi3ICKE10KvnCW5PlhHftffiGyNiDxYlmDhloNYA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/candidat/profil/candidat/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"candidat",
+						"profil",
+						"candidat",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modifier le profil Candidat (y compris le CV)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2Mzg5NjI3LCJpYXQiOjE3NDYzODYwMjcsImp0aSI6ImQyYWNkYTk5YmE3MjQ5MDBhNzUxNjgzMTE5MzQ5YzUxIiwidXNlcl9pZCI6NCwiZW1haWwiOiJyb3NldHRlYWthbkBnbWFpbC5jb20ifQ.7PglDIuAQ_crRACS08Wj6PKjvggZUTCsP9W7ULBVUdo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nom_complet",
+							"value": "\"AKAN Rossette Wilmine\"",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/candidat/profil/candidat/4/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"candidat",
+						"profil",
+						"candidat",
+						"4",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Liste des offres actives",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4ODg2MTQ2LCJpYXQiOjE3NDg4ODI1NDYsImp0aSI6IjYzNWY5YTVlNzkwNzQyNzZiMTE1YmEwMmMyYzc3YjE4IiwidXNlcl9pZCI6MSwiZW1haWwiOiJzdGV2ZW55YWtwb25AZ21haWwuY29tIn0.1d42a9W-7k28zB2-h1dCUjoXkI1QH-3tVdrGtFcyYTg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/candidat/offres/4/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"candidat",
+						"offres",
+						"4",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Détails d'une offres actives",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2Mzk1NDQ0LCJpYXQiOjE3NDYzOTE4NDQsImp0aSI6ImY0ZTM3NDBjZjNhZDQ0YTg5OGFhZDQzNDhmMDhiMjI4IiwidXNlcl9pZCI6NCwiZW1haWwiOiJyb3NldHRlYWthbkBnbWFpbC5jb20ifQ.xZctPo0mA8yKBuVJQRgh-iUWtrFaRS1t6Dwz-N6Gjtw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/candidat/offres/3/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"candidat",
+						"offres",
+						"3",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Postuler à une offre",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NzQzMzQ3LCJpYXQiOjE3NDg3Mzk3NDcsImp0aSI6ImQ2MWEyYjliMmJmYTQ1MDk4ZjgyZTkxMGRlNjY5ZGUyIiwidXNlcl9pZCI6MSwiZW1haWwiOiJzdGV2ZW55YWtwb25AZ21haWwuY29tIn0.Rm_Xi3ICKE10KvnCW5PlhHftffiGyNiDxYlmDhloNYA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"offre\" : 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/candidat/applications/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"candidat",
+						"applications",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Liste des candidatures soumis par un candidat",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUwMDY4MTMzLCJpYXQiOjE3NTAwNjQ1MzMsImp0aSI6ImUyMDRkYThiNzcyMzRiMTI4MWQ2Yzg4ZjljM2NhMGVmIiwidXNlcl9pZCI6MSwiZW1haWwiOiJmcmVzbmVsYWthbkBnbWFpbC5jb20ifQ.SEgZfnbg1ruS4pyVJ3kBPj1jorIyyLsNZ3Nd3SMozEU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/candidat/applications/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"candidat",
+						"applications",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Détails de l'une des candidatures",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4ODk4OTA5LCJpYXQiOjE3NDg4OTUzMDksImp0aSI6IjhkNjM1OGI4NzMyMDQzMmVhMmU5ZWU1ODA4Mzc4MmZiIiwidXNlcl9pZCI6MSwiZW1haWwiOiJzdGV2ZW55YWtwb25AZ21haWwuY29tIn0.pfl3IeGNSqh4DdCgF4KCNQlMWyjbbWz1thobIWbm8YI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8001/api/candidat/applications/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"candidat",
+						"applications",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Scoring des candidatures",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
